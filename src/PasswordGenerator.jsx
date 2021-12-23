@@ -7,6 +7,7 @@ function PasswordGenerator() {
     const [upperLettersRequired, setUpperLettersRequired] = useState(true)
     const [lowerLettersRequired, setLowerLettersRequired] = useState(true)
     const [generatedPassword, setGeneratedPassword] = useState('')
+    const [passwordStrength, setPasswordStrength] = useState('')
 
     const generatePassword = () => {
         let number = "0123456789"
@@ -24,6 +25,37 @@ function PasswordGenerator() {
         }
         else{
             setGeneratedPassword(randomString)
+        }
+        if(numberRequired && upperLettersRequired && lowerLettersRequired){
+            if(length>=16){
+                setPasswordStrength("Very Strong")
+            }
+            else if(length>=8){
+                setPasswordStrength("Strong")
+            }
+            else if(length>=5){
+                setPasswordStrength("Medium")
+            }
+        }
+        else if(((numberRequired && upperLettersRequired) || (numberRequired && lowerLettersRequired) || (upperLettersRequired && lowerLettersRequired))){
+            if(length>=16){
+                setPasswordStrength("strong")
+            }
+            else if(length>=8){
+                setPasswordStrength("Medium")
+            }
+            else if(length>=5){ 
+                setPasswordStrength("Poor")
+            }
+        }
+        else{
+            if(length<8){
+                setPasswordStrength("Very Poor")
+            }
+            else{
+                setPasswordStrength("Poor")
+            }
+            
         }
     }
 
@@ -51,8 +83,10 @@ function PasswordGenerator() {
             return(
                 <div className='generateAndCopy'>
                     <div className="generatedPassword">Password Generated : <span className='password'>{generatedPassword}</span></div>
-                    <button className="copyPassword" onClick={ () => copyPassword()}><i className="fa fa-copy" aria-hidden="true"></i></button>
+                    <button className="copyPassword" title="copy password" onClick={ () => copyPassword()}><i className="fa fa-copy" aria-hidden="true"></i></button>
+                    <div className="passwordStregth">Password Strength : <span className='strength'>{passwordStrength}</span></div>
                 </div>
+                
                 
             )
         }
